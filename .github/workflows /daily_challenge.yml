@@ -1,0 +1,37 @@
+name: Daily Coding Challenge
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  create_challenge_file:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Create Challenge File
+      run: |
+        # Define the filename for today's challenge (e.g., Day1.md)
+        filename="Day$(date +%d).md"
+
+        # Create the file and populate it with template content
+        echo "## Daily Coding Challenge - $(date +%Y-%m-%d)" > $filename
+        echo "" >> $filename
+        echo "### Challenge Question:" >> $filename
+        echo "" >> $filename
+        # Add the question here
+
+        echo "" >> $filename
+        echo "### Solution:" >> $filename
+        echo "" >> $filename
+        # Add your solution here
+
+    - name: Add Challenge File to Git
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add $filename
+        git commit -m "Add daily coding challenge for $(date +%Y-%m-%d)"
+        git push
